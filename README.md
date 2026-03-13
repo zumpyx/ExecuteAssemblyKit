@@ -76,7 +76,7 @@ python scripts/build_dotnet_tools.py --continue-on-error --result-json branch-re
 <!-- build-status:start -->
 ## 当前构建状态
 
-- 最后同步时间：`null`
+- 最后同步时间：`1970-01-01T00:00:00+00:00`
 - 已配置工具数：`0`
 - 已配置目标分支数：`0`
 
