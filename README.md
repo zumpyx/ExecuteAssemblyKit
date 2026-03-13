@@ -17,7 +17,7 @@
 
 1. 读取 `build-config.json`，决定要同步和构建哪些工具
 2. 每天检查配置中的工具仓库是否有新的提交
-3. 按 `.NET 4.0 / 4.5 / 4.7` 与 `Any / x86 / x64` 组合分别构建
+3. 按 `build-config.json` 中声明的目标组合分别构建，仓库默认使用当前 Actions runner 可稳定成功的 `.NET 4.7 / Any`
 4. 将编译结果（包含生成的 PE 文件，如 `.exe` / `.dll`）发布到对应的输出分支，并在分支 README 中写入成功/失败状态
 5. 回写 `main` 分支上的 `build-status.json` 与 README 状态摘要
 
@@ -46,17 +46,11 @@
 
 默认已经包含以下目标分支显示名称：
 
-- `.NET_4.0_Any`
-- `.NET_4.0_x86`
-- `.NET_4.0_x64`
-- `.NET_4.5_Any`
-- `.NET_4.5_x86`
-- `.NET_4.5_x64`
 - `.NET_4.7_Any`
-- `.NET_4.7_x86`
-- `.NET_4.7_x64`
 
-由于 Git 分支名不能以 `.` 开头，工作流会自动把这些显示名称映射为 `NET_4.0_Any` 这类实际分支名。
+之所以默认只保留这个目标，是因为当前 GitHub Actions Windows runner 上，`.NET 4.0 / 4.5` 缺少对应的 targeting pack，而仓库内现有解决方案也没有 `x86` / `x64` 的可用 solution configuration；继续保留这些组合会导致工作流稳定失败。
+
+由于 Git 分支名不能以 `.` 开头，工作流会自动把这些显示名称映射为 `NET_4.7_Any` 这类实际分支名。
 
 然后直接在仓库里触发 Actions 即可。
 

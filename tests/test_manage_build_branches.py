@@ -40,6 +40,21 @@ class ManageBuildBranchesTests(unittest.TestCase):
         )
         self.assertTrue(tools_by_name["RunasCs"]["enabled"])
 
+    def test_root_build_config_limits_targets_to_supported_runner_build(self) -> None:
+        config = json.loads((REPO_ROOT / "build-config.json").read_text(encoding="utf-8"))
+
+        self.assertEqual(
+            config["targets"],
+            [
+                {
+                    "framework_version": "4.7",
+                    "framework_moniker": "net47",
+                    "platform": "Any",
+                    "display_name": ".NET_4.7_Any",
+                }
+            ],
+        )
+
     def test_normalize_target_sanitizes_invalid_branch_name(self) -> None:
         normalized = MANAGE_BUILD_BRANCHES.normalize_target(
             {
