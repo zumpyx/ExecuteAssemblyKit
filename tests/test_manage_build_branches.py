@@ -22,6 +22,25 @@ BUILD_SPEC.loader.exec_module(BUILD_DOTNET_TOOLS)
 
 
 class ManageBuildBranchesTests(unittest.TestCase):
+    def test_root_build_config_includes_seed_tool_repositories(self) -> None:
+        config = json.loads((REPO_ROOT / "build-config.json").read_text(encoding="utf-8"))
+
+        self.assertEqual(
+            config["tools"],
+            [
+                {
+                    "name": "Rubeus",
+                    "repository": "https://github.com/GhostPack/Rubeus.git",
+                    "enabled": True,
+                },
+                {
+                    "name": "RunasCs",
+                    "repository": "https://github.com/antonioCoco/RunasCs.git",
+                    "enabled": True,
+                },
+            ],
+        )
+
     def test_normalize_target_sanitizes_invalid_branch_name(self) -> None:
         normalized = MANAGE_BUILD_BRANCHES.normalize_target(
             {

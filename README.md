@@ -23,15 +23,19 @@
 
 ## 使用方式
 
-在 `build-config.json` 里维护需要自动构建的工具仓库：
+在 `main` 分支根目录的 `build-config.json` 里维护需要自动构建的工具仓库，默认已经预置了以下仓库：
 
 ```json
 {
   "tools": [
     {
-      "name": "ExampleTool",
-      "repository": "https://github.com/example/ExampleTool.git",
-      "ref": "main",
+      "name": "Rubeus",
+      "repository": "https://github.com/GhostPack/Rubeus.git",
+      "enabled": true
+    },
+    {
+      "name": "RunasCs",
+      "repository": "https://github.com/antonioCoco/RunasCs.git",
       "enabled": true
     }
   ]
