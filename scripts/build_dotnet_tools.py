@@ -242,7 +242,12 @@ def release_files_for_target(target: Path, configuration: str) -> Iterable[Path]
         relative = file_path.relative_to(root)
         parts = relative.parts
 
-        if len(parts) < 2 or parts[0] != "bin" or parts[1] != configuration:
+        try:
+            bin_index = parts.index("bin")
+        except ValueError:
+            continue
+
+        if len(parts) <= bin_index + 1 or parts[bin_index + 1] != configuration:
             continue
 
         if any(part in COPY_EXCLUDE_DIRS for part in parts):
