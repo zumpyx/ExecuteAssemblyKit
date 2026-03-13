@@ -1,0 +1,40 @@
+name: Build tools
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * *"
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build repository tools
+        shell: pwsh
+        run: python scripts/build_dotnet_tools.py
+
+      - name: Upload compiled tools
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-tools
+          path: artifacts
+          if-no-files-found: warn
