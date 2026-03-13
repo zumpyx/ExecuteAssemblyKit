@@ -11,14 +11,33 @@ on:
     - cron: "0 3 * * *"
 
 jobs:
-  build:
-    runs-on: windows-latest
-    permissions:
-      contents: read
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+
+      - name: Generate build matrix from config
+        id: matrix
+        run: python scripts/manage_build_branches.py --config build-config.json matrix --github-output "$GITHUB_OUTPUT"
+
+  build:
+    needs: prepare
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.prepare.outputs.matrix) }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up .NET
         uses: actions/setup-dotnet@v4
@@ -30,13 +49,132 @@ jobs:
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      - name: Build repository tools
+      - name: Sync configured tool repositories
         shell: pwsh
-        run: python scripts/build_dotnet_tools.py
+        run: |
+          python scripts/manage_build_branches.py --config build-config.json sync-tools `
+            --status-file build-status.json `
+            --output build-sync.json
 
-      - name: Upload compiled tools
+      - name: Build configured framework target
+        id: compile
+        shell: pwsh
+        run: |
+          $resultPath = "branch-results/${{ matrix.branch }}/build-result.json"
+          python scripts/build_dotnet_tools.py `
+            --configuration Release `
+            --framework-version "${{ matrix.framework_version }}" `
+            --framework-moniker "${{ matrix.framework_moniker }}" `
+            --platform "${{ matrix.platform }}" `
+            --platform-target "${{ matrix.platform_target }}" `
+            --msbuild-platform "${{ matrix.msbuild_platform }}" `
+            --branch-name "${{ matrix.branch }}" `
+            --branch-display-name "${{ matrix.display_name }}" `
+            --tools-metadata build-sync.json `
+            --result-json $resultPath `
+            --continue-on-error
+          $exitCode = $LASTEXITCODE
+          "exit_code=$exitCode" >> $env:GITHUB_OUTPUT
+          if (!(Test-Path "branch-content/${{ matrix.branch }}")) {
+            New-Item -ItemType Directory -Path "branch-content/${{ matrix.branch }}" -Force | Out-Null
+          }
+          if (Test-Path artifacts) {
+            Copy-Item -Path artifacts\* -Destination "branch-content/${{ matrix.branch }}" -Recurse -Force
+          }
+          Copy-Item $resultPath "branch-content/${{ matrix.branch }}/build-result.json" -Force
+
+      - name: Generate output branch README
+        shell: pwsh
+        run: |
+          python scripts/manage_build_branches.py --config build-config.json branch-readme `
+            --result-json "branch-results/${{ matrix.branch }}/build-result.json" `
+            --output "branch-content/${{ matrix.branch }}/README.md"
+
+      - name: Publish framework branch snapshot
+        if: github.event_name != 'pull_request'
+        shell: pwsh
+        env:
+          TARGET_BRANCH: ${{ matrix.branch }}
+          TARGET_DISPLAY_NAME: ${{ matrix.display_name }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $publishDir = Join-Path $env:RUNNER_TEMP "publish-${env:TARGET_BRANCH}"
+          if (Test-Path $publishDir) {
+            Remove-Item -Path $publishDir -Recurse -Force
+          }
+          New-Item -ItemType Directory -Path $publishDir | Out-Null
+          Copy-Item -Path "branch-content/${env:TARGET_BRANCH}\*" -Destination $publishDir -Recurse -Force
+          Push-Location $publishDir
+          git init
+          git checkout --orphan $env:TARGET_BRANCH
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Publish ${env:TARGET_DISPLAY_NAME} build results"
+          git remote add origin "https://x-access-token:${env:GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
+          git push --force origin HEAD:$env:TARGET_BRANCH
+          Pop-Location
+
+      - name: Upload branch build result
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: compiled-tools
-          path: artifacts
+          name: branch-result-${{ matrix.branch }}
+          path: branch-results/${{ matrix.branch }}/build-result.json
+          if-no-files-found: error
+
+      - name: Upload compiled tools
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-tools-${{ matrix.branch }}
+          path: branch-content/${{ matrix.branch }}
           if-no-files-found: warn
+
+      - name: Fail build when any configured tool failed
+        if: always()
+        shell: pwsh
+        run: |
+          if ("${{ steps.compile.outputs.exit_code }}" -ne "0") {
+            exit 1
+          }
+
+  update-main-status:
+    needs: build
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download branch result artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: branch-result-*
+          path: branch-results
+          merge-multiple: false
+
+      - name: Aggregate branch status into main
+        run: |
+          python scripts/manage_build_branches.py --config build-config.json aggregate \
+            --results-dir branch-results \
+            --status-output build-status.json \
+            --readme README.md \
+            --previous-status build-status.json
+
+      - name: Commit status updates to main branch
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md build-status.json
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Update build status"
+          git push

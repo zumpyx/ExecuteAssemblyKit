@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import shutil
 import subprocess
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable
 from xml.etree import ElementTree
@@ -40,6 +42,52 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=script_root / "artifacts",
         help="Directory where compiled outputs will be copied.",
+    )
+    parser.add_argument(
+        "--framework-version",
+        help="Optional .NET Framework version (for example 4.0, 4.5 or 4.7).",
+    )
+    parser.add_argument(
+        "--framework-moniker",
+        help="Optional target framework moniker passed to SDK-style builds (for example net40).",
+    )
+    parser.add_argument(
+        "--platform",
+        default="Any",
+        help="Display platform name used in build metadata.",
+    )
+    parser.add_argument(
+        "--platform-target",
+        default="AnyCPU",
+        help="PlatformTarget property value passed to MSBuild or dotnet build.",
+    )
+    parser.add_argument(
+        "--msbuild-platform",
+        default="Any CPU",
+        help="Platform property value passed to MSBuild or dotnet build.",
+    )
+    parser.add_argument(
+        "--branch-name",
+        help="Optional branch name to record in the generated build result metadata.",
+    )
+    parser.add_argument(
+        "--branch-display-name",
+        help="Optional human-readable branch label to record in the generated build result metadata.",
+    )
+    parser.add_argument(
+        "--tools-metadata",
+        type=Path,
+        help="Optional JSON file describing configured tools and upstream revisions.",
+    )
+    parser.add_argument(
+        "--result-json",
+        type=Path,
+        help="Optional JSON file to write build results into.",
+    )
+    parser.add_argument(
+        "--continue-on-error",
+        action="store_true",
+        help="Continue building remaining targets when one target fails.",
     )
     return parser.parse_args()
 
@@ -103,7 +151,55 @@ def resolve_builder(target: Path) -> list[str]:
     )
 
 
-def build_target(target: Path, configuration: str) -> None:
+def utc_now() -> str:
+    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+
+
+def load_tools_metadata(metadata_path: Path | None) -> list[dict[str, object]]:
+    if not metadata_path:
+        return []
+
+    data = json.loads(metadata_path.read_text(encoding="utf-8"))
+    tools = data.get("tools", [])
+    if not isinstance(tools, list):
+        raise ValueError("tools metadata file must contain a top-level 'tools' list")
+    return tools
+
+
+def append_target_properties(
+    command: list[str],
+    *,
+    framework_version: str | None,
+    framework_moniker: str | None,
+    platform_target: str,
+    msbuild_platform: str,
+) -> None:
+    if command[0] == "dotnet":
+        if framework_moniker:
+            command.append(f"-p:TargetFramework={framework_moniker}")
+        if msbuild_platform:
+            command.append(f"-p:Platform={msbuild_platform}")
+        if platform_target:
+            command.append(f"-p:PlatformTarget={platform_target}")
+        return
+
+    if framework_version:
+        command.append(f"/p:TargetFrameworkVersion=v{framework_version}")
+    if msbuild_platform:
+        command.append(f"/p:Platform={msbuild_platform}")
+    if platform_target:
+        command.append(f"/p:PlatformTarget={platform_target}")
+
+
+def build_target(
+    target: Path,
+    configuration: str,
+    *,
+    framework_version: str | None,
+    framework_moniker: str | None,
+    platform_target: str,
+    msbuild_platform: str,
+) -> None:
     command = resolve_builder(target)
 
     if command[0] == "dotnet":
@@ -117,6 +213,14 @@ def build_target(target: Path, configuration: str) -> None:
                 "/p:RestorePackagesConfig=true",
             ]
         )
+
+    append_target_properties(
+        command,
+        framework_version=framework_version,
+        framework_moniker=framework_moniker,
+        platform_target=platform_target,
+        msbuild_platform=msbuild_platform,
+    )
 
     print(f"::group::Building {target}")
     print("Running:", " ".join(command))
@@ -162,6 +266,41 @@ def copy_outputs(target: Path, configuration: str, output_dir: Path) -> int:
     return copied
 
 
+def write_result_json(args: argparse.Namespace, repo_root: Path, output_dir: Path, results: list[dict[str, object]]) -> None:
+    if not args.result_json:
+        return
+
+    status = "success" if all(result["status"] == "success" for result in results) else "failed"
+    payload = {
+        "generated_at": utc_now(),
+        "repository_root": str(repo_root),
+        "output_dir": str(output_dir),
+        "configuration": args.configuration,
+        "branch_name": args.branch_name,
+        "branch_display_name": args.branch_display_name,
+        "framework_version": args.framework_version,
+        "framework_moniker": args.framework_moniker,
+        "platform": args.platform,
+        "platform_target": args.platform_target,
+        "msbuild_platform": args.msbuild_platform,
+        "summary": {
+            "status": status,
+            "total_targets": len(results),
+            "successful_targets": sum(1 for result in results if result["status"] == "success"),
+            "failed_targets": sum(1 for result in results if result["status"] != "success"),
+            "copied_files": sum(int(result.get("copied_files", 0)) for result in results),
+        },
+        "tools": load_tools_metadata(args.tools_metadata),
+        "results": results,
+    }
+
+    args.result_json.parent.mkdir(parents=True, exist_ok=True)
+    args.result_json.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
 def main() -> int:
     args = parse_args()
     repo_root = args.root.resolve()
@@ -174,6 +313,7 @@ def main() -> int:
     targets = discover_build_targets(tools_dir)
     if not targets:
         print("No .sln or .csproj files were found under the tools directory. Nothing to build.")
+        write_result_json(args, repo_root, output_dir, [])
         return 0
 
     if output_dir.exists():
@@ -185,14 +325,42 @@ def main() -> int:
         print(f" - {target.relative_to(repo_root)}")
 
     total_copied = 0
+    results: list[dict[str, object]] = []
+    has_failures = False
     for target in targets:
-        build_target(target, args.configuration)
-        copied = copy_outputs(target, args.configuration, output_dir)
-        total_copied += copied
-        print(f"Copied {copied} output file(s) for {target.name}")
+        result: dict[str, object] = {
+            "target": str(target.relative_to(repo_root)),
+            "project": target.stem,
+            "status": "success",
+            "copied_files": 0,
+        }
+        try:
+            build_target(
+                target,
+                args.configuration,
+                framework_version=args.framework_version,
+                framework_moniker=args.framework_moniker,
+                platform_target=args.platform_target,
+                msbuild_platform=args.msbuild_platform,
+            )
+            copied = copy_outputs(target, args.configuration, output_dir)
+            total_copied += copied
+            result["copied_files"] = copied
+            print(f"Copied {copied} output file(s) for {target.name}")
+        except (subprocess.CalledProcessError, RuntimeError, ValueError) as error:
+            has_failures = True
+            result["status"] = "failed"
+            result["error"] = str(error)
+            print(f"::error::{target.name} failed: {error}")
+            if not args.continue_on_error:
+                results.append(result)
+                write_result_json(args, repo_root, output_dir, results)
+                return 1
+        results.append(result)
 
     print(f"Finished. Copied {total_copied} file(s) into {output_dir}")
-    return 0
+    write_result_json(args, repo_root, output_dir, results)
+    return 1 if has_failures else 0
 
 
 if __name__ == "__main__":
