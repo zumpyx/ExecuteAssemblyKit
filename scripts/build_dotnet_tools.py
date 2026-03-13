@@ -44,7 +44,7 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def iter_candidates(base_dir: Path, suffix: str) -> Iterable[Path]:
+def iter_candidates(base_dir: Path, suffix: str) -> list[Path]:
     if not base_dir.exists():
         return []
 
