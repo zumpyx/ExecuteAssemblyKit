@@ -76,9 +76,9 @@ python scripts/build_dotnet_tools.py --continue-on-error --result-json branch-re
 <!-- build-status:start -->
 ## 当前构建状态
 
-- 最后同步时间：`1970-01-01T00:00:00+00:00`
+- 最后同步时间：`2026-03-13T01:36:35+00:00`
 - 已配置工具数：`0`
-- 已配置目标分支数：`0`
+- 已配置目标分支数：`9`
 
 ### 工具仓库检查
 
@@ -90,7 +90,15 @@ python scripts/build_dotnet_tools.py --continue-on-error --result-json branch-re
 
 | 显示名称 | Git 分支 | 状态 | 成功/失败 | 最后构建时间 |
 | --- | --- | --- | --- | --- |
-| - | - | - | - | - |
+| .NET_4.0_Any | `NET_4.0_Any` | success | 0/0 | `2026-03-13T01:34:46+00:00` |
+| .NET_4.0_x86 | `NET_4.0_x86` | success | 0/0 | `2026-03-13T01:36:15+00:00` |
+| .NET_4.0_x64 | `NET_4.0_x64` | success | 0/0 | `2026-03-13T01:36:00+00:00` |
+| .NET_4.5_Any | `NET_4.5_Any` | success | 0/0 | `2026-03-13T01:34:57+00:00` |
+| .NET_4.5_x86 | `NET_4.5_x86` | success | 0/0 | `2026-03-13T01:34:32+00:00` |
+| .NET_4.5_x64 | `NET_4.5_x64` | success | 0/0 | `2026-03-13T01:34:27+00:00` |
+| .NET_4.7_Any | `NET_4.7_Any` | success | 0/0 | `2026-03-13T01:34:44+00:00` |
+| .NET_4.7_x86 | `NET_4.7_x86` | success | 0/0 | `2026-03-13T01:34:46+00:00` |
+| .NET_4.7_x64 | `NET_4.7_x64` | success | 0/0 | `2026-03-13T01:34:52+00:00` |
 
 > 说明：Git 分支名不能以 `.` 开头，因此像 `.NET_4.0_Any` 这样的显示名称会自动映射为 `NET_4.0_Any` 分支。
 <!-- build-status:end -->
