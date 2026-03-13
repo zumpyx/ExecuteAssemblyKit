@@ -1,6 +1,25 @@
 {
-  "generated_at": "2026-03-13T01:36:35+00:00",
-  "tools": [],
+  "generated_at": "2026-03-13T02:30:34+00:00",
+  "tools": [
+    {
+      "name": "Rubeus",
+      "repository": "https://github.com/GhostPack/Rubeus.git",
+      "ref": "HEAD",
+      "source_path": "D:\\a\\ExecuteAssemblyKit\\ExecuteAssemblyKit\\tools\\Rubeus",
+      "latest_revision": "74215f68ea70bd6a66c008da91bf5fe21d20b154",
+      "previous_revision": "",
+      "updated": true
+    },
+    {
+      "name": "RunasCs",
+      "repository": "https://github.com/antonioCoco/RunasCs.git",
+      "ref": "HEAD",
+      "source_path": "D:\\a\\ExecuteAssemblyKit\\ExecuteAssemblyKit\\tools\\RunasCs",
+      "latest_revision": "a1e47b55952fadd46bf097be74a6efbcbe846c2b",
+      "previous_revision": "",
+      "updated": true
+    }
+  ],
   "branches": [
     {
       "branch": "NET_4.0_Any",
@@ -8,11 +27,11 @@
       "framework_version": "4.0",
       "framework_moniker": "net40",
       "platform": "Any",
-      "status": "success",
+      "status": "failed",
       "successful_targets": 0,
-      "failed_targets": 0,
+      "failed_targets": 1,
       "copied_files": 0,
-      "last_build_at": "2026-03-13T01:34:46+00:00"
+      "last_build_at": "2026-03-13T02:29:47+00:00"
     },
     {
       "branch": "NET_4.0_x86",
@@ -20,11 +39,11 @@
       "framework_version": "4.0",
       "framework_moniker": "net40",
       "platform": "x86",
-      "status": "success",
+      "status": "failed",
       "successful_targets": 0,
-      "failed_targets": 0,
+      "failed_targets": 1,
       "copied_files": 0,
-      "last_build_at": "2026-03-13T01:36:15+00:00"
+      "last_build_at": "2026-03-13T02:29:36+00:00"
     },
     {
       "branch": "NET_4.0_x64",
@@ -32,11 +51,11 @@
       "framework_version": "4.0",
       "framework_moniker": "net40",
       "platform": "x64",
-      "status": "success",
+      "status": "failed",
       "successful_targets": 0,
-      "failed_targets": 0,
+      "failed_targets": 1,
       "copied_files": 0,
-      "last_build_at": "2026-03-13T01:36:00+00:00"
+      "last_build_at": "2026-03-13T02:29:51+00:00"
     },
     {
       "branch": "NET_4.5_Any",
@@ -44,11 +63,11 @@
       "framework_version": "4.5",
       "framework_moniker": "net45",
       "platform": "Any",
-      "status": "success",
+      "status": "failed",
       "successful_targets": 0,
-      "failed_targets": 0,
+      "failed_targets": 1,
       "copied_files": 0,
-      "last_build_at": "2026-03-13T01:34:57+00:00"
+      "last_build_at": "2026-03-13T02:29:34+00:00"
     },
     {
       "branch": "NET_4.5_x86",
@@ -56,11 +75,11 @@
       "framework_version": "4.5",
       "framework_moniker": "net45",
       "platform": "x86",
-      "status": "success",
+      "status": "failed",
       "successful_targets": 0,
-      "failed_targets": 0,
+      "failed_targets": 1,
       "copied_files": 0,
-      "last_build_at": "2026-03-13T01:34:32+00:00"
+      "last_build_at": "2026-03-13T02:29:40+00:00"
     },
     {
       "branch": "NET_4.5_x64",
@@ -68,11 +87,11 @@
       "framework_version": "4.5",
       "framework_moniker": "net45",
       "platform": "x64",
-      "status": "success",
+      "status": "failed",
       "successful_targets": 0,
-      "failed_targets": 0,
+      "failed_targets": 1,
       "copied_files": 0,
-      "last_build_at": "2026-03-13T01:34:27+00:00"
+      "last_build_at": "2026-03-13T02:29:37+00:00"
     },
     {
       "branch": "NET_4.7_Any",
@@ -81,10 +100,10 @@
       "framework_moniker": "net47",
       "platform": "Any",
       "status": "success",
-      "successful_targets": 0,
+      "successful_targets": 1,
       "failed_targets": 0,
-      "copied_files": 0,
-      "last_build_at": "2026-03-13T01:34:44+00:00"
+      "copied_files": 2,
+      "last_build_at": "2026-03-13T02:29:35+00:00"
     },
     {
       "branch": "NET_4.7_x86",
@@ -92,11 +111,11 @@
       "framework_version": "4.7",
       "framework_moniker": "net47",
       "platform": "x86",
-      "status": "success",
+      "status": "failed",
       "successful_targets": 0,
-      "failed_targets": 0,
+      "failed_targets": 1,
       "copied_files": 0,
-      "last_build_at": "2026-03-13T01:34:46+00:00"
+      "last_build_at": "2026-03-13T02:30:21+00:00"
     },
     {
       "branch": "NET_4.7_x64",
@@ -104,15 +123,15 @@
       "framework_version": "4.7",
       "framework_moniker": "net47",
       "platform": "x64",
-      "status": "success",
+      "status": "failed",
       "successful_targets": 0,
-      "failed_targets": 0,
+      "failed_targets": 1,
       "copied_files": 0,
-      "last_build_at": "2026-03-13T01:34:52+00:00"
+      "last_build_at": "2026-03-13T02:29:32+00:00"
     }
   ],
   "summary": {
-    "tool_count": 0,
+    "tool_count": 2,
     "branch_count": 9
   }
 }
