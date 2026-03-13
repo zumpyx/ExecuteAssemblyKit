@@ -1,0 +1,59 @@
+{
+  "tools": [],
+  "targets": [
+    {
+      "framework_version": "4.0",
+      "framework_moniker": "net40",
+      "platform": "Any",
+      "display_name": ".NET_4.0_Any"
+    },
+    {
+      "framework_version": "4.0",
+      "framework_moniker": "net40",
+      "platform": "x86",
+      "display_name": ".NET_4.0_x86"
+    },
+    {
+      "framework_version": "4.0",
+      "framework_moniker": "net40",
+      "platform": "x64",
+      "display_name": ".NET_4.0_x64"
+    },
+    {
+      "framework_version": "4.5",
+      "framework_moniker": "net45",
+      "platform": "Any",
+      "display_name": ".NET_4.5_Any"
+    },
+    {
+      "framework_version": "4.5",
+      "framework_moniker": "net45",
+      "platform": "x86",
+      "display_name": ".NET_4.5_x86"
+    },
+    {
+      "framework_version": "4.5",
+      "framework_moniker": "net45",
+      "platform": "x64",
+      "display_name": ".NET_4.5_x64"
+    },
+    {
+      "framework_version": "4.7",
+      "framework_moniker": "net47",
+      "platform": "Any",
+      "display_name": ".NET_4.7_Any"
+    },
+    {
+      "framework_version": "4.7",
+      "framework_moniker": "net47",
+      "platform": "x86",
+      "display_name": ".NET_4.7_x86"
+    },
+    {
+      "framework_version": "4.7",
+      "framework_moniker": "net47",
+      "platform": "x64",
+      "display_name": ".NET_4.7_x64"
+    }
+  ]
+}
