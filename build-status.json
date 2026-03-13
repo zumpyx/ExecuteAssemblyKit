@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-13T02:30:34+00:00",
+  "generated_at": "2026-03-13T03:51:14+00:00",
   "tools": [
     {
       "name": "Rubeus",
@@ -7,8 +7,8 @@
       "ref": "HEAD",
       "source_path": "D:\\a\\ExecuteAssemblyKit\\ExecuteAssemblyKit\\tools\\Rubeus",
       "latest_revision": "74215f68ea70bd6a66c008da91bf5fe21d20b154",
-      "previous_revision": "",
-      "updated": true
+      "previous_revision": "74215f68ea70bd6a66c008da91bf5fe21d20b154",
+      "updated": false
     },
     {
       "name": "RunasCs",
@@ -16,8 +16,8 @@
       "ref": "HEAD",
       "source_path": "D:\\a\\ExecuteAssemblyKit\\ExecuteAssemblyKit\\tools\\RunasCs",
       "latest_revision": "a1e47b55952fadd46bf097be74a6efbcbe846c2b",
-      "previous_revision": "",
-      "updated": true
+      "previous_revision": "a1e47b55952fadd46bf097be74a6efbcbe846c2b",
+      "updated": false
     }
   ],
   "branches": [
@@ -31,7 +31,7 @@
       "successful_targets": 0,
       "failed_targets": 1,
       "copied_files": 0,
-      "last_build_at": "2026-03-13T02:29:47+00:00"
+      "last_build_at": "2026-03-13T03:48:38+00:00"
     },
     {
       "branch": "NET_4.0_x86",
@@ -43,7 +43,7 @@
       "successful_targets": 0,
       "failed_targets": 1,
       "copied_files": 0,
-      "last_build_at": "2026-03-13T02:29:36+00:00"
+      "last_build_at": "2026-03-13T03:48:35+00:00"
     },
     {
       "branch": "NET_4.0_x64",
@@ -55,7 +55,7 @@
       "successful_targets": 0,
       "failed_targets": 1,
       "copied_files": 0,
-      "last_build_at": "2026-03-13T02:29:51+00:00"
+      "last_build_at": "2026-03-13T03:48:13+00:00"
     },
     {
       "branch": "NET_4.5_Any",
@@ -67,7 +67,7 @@
       "successful_targets": 0,
       "failed_targets": 1,
       "copied_files": 0,
-      "last_build_at": "2026-03-13T02:29:34+00:00"
+      "last_build_at": "2026-03-13T03:49:22+00:00"
     },
     {
       "branch": "NET_4.5_x86",
@@ -79,7 +79,7 @@
       "successful_targets": 0,
       "failed_targets": 1,
       "copied_files": 0,
-      "last_build_at": "2026-03-13T02:29:40+00:00"
+      "last_build_at": "2026-03-13T03:48:31+00:00"
     },
     {
       "branch": "NET_4.5_x64",
@@ -91,7 +91,7 @@
       "successful_targets": 0,
       "failed_targets": 1,
       "copied_files": 0,
-      "last_build_at": "2026-03-13T02:29:37+00:00"
+      "last_build_at": "2026-03-13T03:48:51+00:00"
     },
     {
       "branch": "NET_4.7_Any",
@@ -103,7 +103,7 @@
       "successful_targets": 1,
       "failed_targets": 0,
       "copied_files": 2,
-      "last_build_at": "2026-03-13T02:29:35+00:00"
+      "last_build_at": "2026-03-13T03:49:28+00:00"
     },
     {
       "branch": "NET_4.7_x86",
@@ -115,7 +115,7 @@
       "successful_targets": 0,
       "failed_targets": 1,
       "copied_files": 0,
-      "last_build_at": "2026-03-13T02:30:21+00:00"
+      "last_build_at": "2026-03-13T03:51:03+00:00"
     },
     {
       "branch": "NET_4.7_x64",
@@ -127,7 +127,7 @@
       "successful_targets": 0,
       "failed_targets": 1,
       "copied_files": 0,
-      "last_build_at": "2026-03-13T02:29:32+00:00"
+      "last_build_at": "2026-03-13T03:48:28+00:00"
     }
   ],
   "summary": {
