@@ -40,7 +40,7 @@ class ManageBuildBranchesTests(unittest.TestCase):
         )
         self.assertTrue(tools_by_name["RunasCs"]["enabled"])
 
-    def test_root_build_config_limits_targets_to_supported_runner_build(self) -> None:
+    def test_build_config_contains_only_supported_targets(self) -> None:
         config = json.loads((REPO_ROOT / "build-config.json").read_text(encoding="utf-8"))
 
         self.assertEqual(
