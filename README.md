@@ -18,20 +18,24 @@
 1. 读取 `build-config.json`，决定要同步和构建哪些工具
 2. 每天检查配置中的工具仓库是否有新的提交
 3. 按 `.NET 4.0 / 4.5 / 4.7` 与 `Any / x86 / x64` 组合分别构建
-4. 将编译结果发布到对应的输出分支，并在分支 README 中写入成功/失败状态
+4. 将编译结果（包含生成的 PE 文件，如 `.exe` / `.dll`）发布到对应的输出分支，并在分支 README 中写入成功/失败状态
 5. 回写 `main` 分支上的 `build-status.json` 与 README 状态摘要
 
 ## 使用方式
 
-在 `build-config.json` 里维护需要自动构建的工具仓库：
+在 `main` 分支根目录的 `build-config.json` 里维护需要自动构建的工具仓库，默认已经预置了以下仓库：
 
 ```json
 {
   "tools": [
     {
-      "name": "ExampleTool",
-      "repository": "https://github.com/example/ExampleTool.git",
-      "ref": "main",
+      "name": "Rubeus",
+      "repository": "https://github.com/GhostPack/Rubeus.git",
+      "enabled": true
+    },
+    {
+      "name": "RunasCs",
+      "repository": "https://github.com/antonioCoco/RunasCs.git",
       "enabled": true
     }
   ]

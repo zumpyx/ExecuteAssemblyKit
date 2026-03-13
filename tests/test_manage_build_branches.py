@@ -22,6 +22,24 @@ BUILD_SPEC.loader.exec_module(BUILD_DOTNET_TOOLS)
 
 
 class ManageBuildBranchesTests(unittest.TestCase):
+    def test_root_build_config_includes_seed_tool_repositories(self) -> None:
+        config = json.loads((REPO_ROOT / "build-config.json").read_text(encoding="utf-8"))
+        tools_by_name = {tool["name"]: tool for tool in config["tools"]}
+
+        self.assertIn("Rubeus", tools_by_name)
+        self.assertEqual(
+            tools_by_name["Rubeus"]["repository"],
+            "https://github.com/GhostPack/Rubeus.git",
+        )
+        self.assertTrue(tools_by_name["Rubeus"]["enabled"])
+
+        self.assertIn("RunasCs", tools_by_name)
+        self.assertEqual(
+            tools_by_name["RunasCs"]["repository"],
+            "https://github.com/antonioCoco/RunasCs.git",
+        )
+        self.assertTrue(tools_by_name["RunasCs"]["enabled"])
+
     def test_normalize_target_sanitizes_invalid_branch_name(self) -> None:
         normalized = MANAGE_BUILD_BRANCHES.normalize_target(
             {
@@ -151,6 +169,36 @@ class ManageBuildBranchesTests(unittest.TestCase):
             self.assertEqual(result["summary"]["total_targets"], 0)
             self.assertEqual(result["summary"]["status"], "success")
             self.assertEqual(result["results"], [])
+
+    def test_copy_outputs_includes_nested_solution_pe_files(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_root = Path(temp_dir)
+            solution_path = temp_root / "ToolSuite.sln"
+            solution_path.write_text("", encoding="utf-8")
+
+            project_output_dir = temp_root / "Rubeus" / "bin" / "Release"
+            project_output_dir.mkdir(parents=True)
+            exe_path = project_output_dir / "Rubeus.exe"
+            dll_path = project_output_dir / "Helper.dll"
+            pdb_path = project_output_dir / "Helper.pdb"
+            exe_path.write_text("exe", encoding="utf-8")
+            dll_path.write_text("dll", encoding="utf-8")
+            pdb_path.write_text("pdb", encoding="utf-8")
+
+            ignored_ref_dir = project_output_dir / "ref"
+            ignored_ref_dir.mkdir()
+            (ignored_ref_dir / "Ignored.dll").write_text("ignored", encoding="utf-8")
+
+            output_dir = temp_root / "artifacts"
+            copied_files = BUILD_DOTNET_TOOLS.copy_outputs(solution_path, "Release", output_dir)
+
+            self.assertEqual(copied_files, 3)
+            self.assertTrue((output_dir / "ToolSuite" / "Rubeus" / "bin" / "Release" / "Rubeus.exe").exists())
+            self.assertTrue((output_dir / "ToolSuite" / "Rubeus" / "bin" / "Release" / "Helper.dll").exists())
+            self.assertTrue((output_dir / "ToolSuite" / "Rubeus" / "bin" / "Release" / "Helper.pdb").exists())
+            self.assertFalse(
+                (output_dir / "ToolSuite" / "Rubeus" / "bin" / "Release" / "ref" / "Ignored.dll").exists()
+            )
 
 
 if __name__ == "__main__":
