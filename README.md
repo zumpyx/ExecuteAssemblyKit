@@ -1,4 +1,4 @@
-# execute-assembly
+# ExecuteAssemblyKit (`execute-assembly`)
 
 在自己的仓库里自动编译并归档 .NET 程序 / .NET Framework 项目，避免依赖第三方的集中式构建仓库或不受控的聚合二进制来源。
 
