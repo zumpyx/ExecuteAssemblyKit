@@ -10,15 +10,7 @@ from pathlib import Path
 
 
 DEFAULT_TARGETS = [
-    {"framework_version": "4.0", "framework_moniker": "net40", "platform": "Any"},
-    {"framework_version": "4.0", "framework_moniker": "net40", "platform": "x86"},
-    {"framework_version": "4.0", "framework_moniker": "net40", "platform": "x64"},
-    {"framework_version": "4.5", "framework_moniker": "net45", "platform": "Any"},
-    {"framework_version": "4.5", "framework_moniker": "net45", "platform": "x86"},
-    {"framework_version": "4.5", "framework_moniker": "net45", "platform": "x64"},
     {"framework_version": "4.7", "framework_moniker": "net47", "platform": "Any"},
-    {"framework_version": "4.7", "framework_moniker": "net47", "platform": "x86"},
-    {"framework_version": "4.7", "framework_moniker": "net47", "platform": "x64"},
 ]
 MSBUILD_PLATFORM_MAP = {"Any": "Any CPU", "x86": "x86", "x64": "x64"}
 PLATFORM_TARGET_MAP = {"Any": "AnyCPU", "x86": "x86", "x64": "x64"}
