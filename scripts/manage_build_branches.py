@@ -253,7 +253,7 @@ def write_branch_readme(result_json: Path, output_path: Path) -> int:
         f"- 目标框架：`.NET {result.get('framework_version')}`",
         f"- 目标平台：`{result.get('platform')}`",
         "",
-        "## 工具构建结果",
+        "## 项目构建结果",
         "",
         *build_result_rows(result),
         "",
@@ -263,9 +263,9 @@ def write_branch_readme(result_json: Path, output_path: Path) -> int:
     if tools:
         lines.extend(
             [
-                "## 工具仓库状态",
+                "## 源码仓库状态",
                 "",
-                "| 工具 | 仓库 | 最新提交 | 检测到更新 |",
+                "| 仓库名 | 仓库 | 最新提交 | 检测到更新 |",
                 "| --- | --- | --- | --- |",
             ]
         )
@@ -296,12 +296,12 @@ def status_markdown(status: dict[str, object]) -> str:
         "## 当前构建状态",
         "",
         f"- 最后同步时间：`{status.get('generated_at')}`",
-        f"- 已配置工具数：`{status.get('summary', {}).get('tool_count', 0)}`",
+        f"- 已配置源码仓库数：`{status.get('summary', {}).get('tool_count', 0)}`",
         f"- 已配置目标分支数：`{status.get('summary', {}).get('branch_count', 0)}`",
         "",
-        "### 工具仓库检查",
+        "### 源码仓库检查",
         "",
-        "| 工具 | 仓库 | 最新提交 | 检测到更新 |",
+        "| 仓库名 | 仓库 | 最新提交 | 检测到更新 |",
         "| --- | --- | --- | --- |",
     ]
     for tool in status.get("tools", []):
