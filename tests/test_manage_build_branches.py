@@ -40,6 +40,43 @@ class ManageBuildBranchesTests(unittest.TestCase):
         )
         self.assertTrue(tools_by_name["RunasCs"]["enabled"])
 
+    def test_build_config_contains_only_supported_targets(self) -> None:
+        config = json.loads((REPO_ROOT / "build-config.json").read_text(encoding="utf-8"))
+
+        self.assertEqual(
+            config["targets"],
+            [
+                {
+                    "framework_version": "4.7",
+                    "framework_moniker": "net47",
+                    "platform": "Any",
+                    "display_name": ".NET_4.7_Any",
+                }
+            ],
+        )
+
+    def test_config_without_targets_falls_back_to_supported_default(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            config_path = Path(temp_dir) / "build-config.json"
+            config_path.write_text(json.dumps({"tools": []}), encoding="utf-8")
+
+            config = MANAGE_BUILD_BRANCHES.load_config(config_path)
+
+            self.assertEqual(
+                MANAGE_BUILD_BRANCHES.configured_targets(config),
+                [
+                    {
+                        "framework_version": "4.7",
+                        "framework_moniker": "net47",
+                        "platform": "Any",
+                        "display_name": ".NET_4.7_Any",
+                        "branch": "NET_4.7_Any",
+                        "msbuild_platform": "Any CPU",
+                        "platform_target": "AnyCPU",
+                    }
+                ],
+            )
+
     def test_normalize_target_sanitizes_invalid_branch_name(self) -> None:
         normalized = MANAGE_BUILD_BRANCHES.normalize_target(
             {
