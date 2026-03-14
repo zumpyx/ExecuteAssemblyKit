@@ -1,25 +1,6 @@
 {
   "generated_at": "2026-03-14T14:57:16+00:00",
-  "tools": [
-    {
-      "name": "Rubeus",
-      "repository": "https://github.com/GhostPack/Rubeus.git",
-      "ref": "HEAD",
-      "source_path": "D:\\a\\ExecuteAssemblyKit\\ExecuteAssemblyKit\\tools\\Rubeus",
-      "latest_revision": "74215f68ea70bd6a66c008da91bf5fe21d20b154",
-      "previous_revision": "74215f68ea70bd6a66c008da91bf5fe21d20b154",
-      "updated": false
-    },
-    {
-      "name": "RunasCs",
-      "repository": "https://github.com/antonioCoco/RunasCs.git",
-      "ref": "HEAD",
-      "source_path": "D:\\a\\ExecuteAssemblyKit\\ExecuteAssemblyKit\\tools\\RunasCs",
-      "latest_revision": "a1e47b55952fadd46bf097be74a6efbcbe846c2b",
-      "previous_revision": "a1e47b55952fadd46bf097be74a6efbcbe846c2b",
-      "updated": false
-    }
-  ],
+  "tools": [],
   "branches": [
     {
       "branch": "NET_4.7_Any",
@@ -35,7 +16,7 @@
     }
   ],
   "summary": {
-    "tool_count": 2,
+    "tool_count": 0,
     "branch_count": 1
   }
 }

@@ -42,7 +42,7 @@ def parse_args() -> argparse.Namespace:
         help="Optional GitHub output file that will receive the matrix JSON.",
     )
 
-    sync_parser = subparsers.add_parser("sync-tools", help="Clone configured tool repositories.")
+    sync_parser = subparsers.add_parser("sync-tools", help="Clone configured source repositories.")
     sync_parser.add_argument(
         "--tools-dir",
         type=Path,

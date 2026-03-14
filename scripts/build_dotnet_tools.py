@@ -19,7 +19,7 @@ COPY_EXCLUDE_DIRS = {"obj", "ref", "refs"}
 def parse_args() -> argparse.Namespace:
     script_root = Path(__file__).resolve().parents[1]
     parser = argparse.ArgumentParser(
-        description="Discover and compile .NET tools stored in this repository."
+        description="Discover and compile .NET projects stored in this repository."
     )
     parser.add_argument(
         "--root",
@@ -30,7 +30,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--projects-dir",
         default="tools",
-        help="Directory under the repository root that contains tool sources.",
+        help="Directory under the repository root that contains project sources.",
     )
     parser.add_argument(
         "--configuration",
@@ -77,7 +77,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--tools-metadata",
         type=Path,
-        help="Optional JSON file describing configured tools and upstream revisions.",
+        help="Optional JSON file describing configured source repositories and upstream revisions.",
     )
     parser.add_argument(
         "--result-json",
