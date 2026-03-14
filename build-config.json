@@ -1,16 +1,5 @@
 {
-  "tools": [
-    {
-      "name": "Rubeus",
-      "repository": "https://github.com/GhostPack/Rubeus.git",
-      "enabled": true
-    },
-    {
-      "name": "RunasCs",
-      "repository": "https://github.com/antonioCoco/RunasCs.git",
-      "enabled": true
-    }
-  ],
+  "tools": [],
   "targets": [
     {
       "framework_version": "4.7",

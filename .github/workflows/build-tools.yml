@@ -1,4 +1,4 @@
-name: Build tools
+name: Build .NET projects
 
 on:
   push:
@@ -52,7 +52,7 @@ jobs:
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      - name: Sync configured tool repositories
+      - name: Sync configured source repositories
         shell: pwsh
         run: |
           python scripts/manage_build_branches.py --config build-config.json sync-tools `
@@ -126,7 +126,7 @@ jobs:
           path: branch-results/${{ matrix.branch }}/build-result.json
           if-no-files-found: error
 
-      - name: Upload compiled tools
+      - name: Upload compiled assemblies
         if: always()
         uses: actions/upload-artifact@v4
         with:

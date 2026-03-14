@@ -1,6 +1,6 @@
-# ExecuteAssemblyKit
+# ExecuteAssemblyKit (`execute-assembly`)
 
-在自己的仓库里自动编译并归档 .NET 工具，避免依赖第三方的集中式构建仓库。
+在自己的仓库里自动编译并归档 .NET 程序 / .NET Framework 项目，避免依赖第三方的集中式构建仓库或不受控的聚合二进制来源。
 
 ## 自动编译
 
@@ -23,26 +23,21 @@
 
 ## 使用方式
 
-在 `main` 分支根目录的 `build-config.json` 里维护需要自动构建的工具仓库，默认已经预置了以下仓库：
+在 `main` 分支根目录的 `build-config.json` 里维护需要自动构建的源码仓库。默认配置不会预置任何第三方仓库，你只需要把自己的仓库地址填进去即可：
 
 ```json
 {
   "tools": [
     {
-      "name": "Rubeus",
-      "repository": "https://github.com/GhostPack/Rubeus.git",
-      "enabled": true
-    },
-    {
-      "name": "RunasCs",
-      "repository": "https://github.com/antonioCoco/RunasCs.git",
+      "name": "ExampleApp",
+      "repository": "https://github.com/your-org/ExampleApp.git",
       "enabled": true
     }
   ]
 }
 ```
 
-工作流会把这些仓库克隆到 `tools/` 目录，再自动发现其中的 `.sln` / `.csproj` 并执行构建。
+工作流会把这些仓库克隆到 `tools/` 目录，再自动发现其中的 `.sln` / `.csproj` 并执行构建。这样你可以只编译自己明确指定的源码仓库，减少依赖第三方聚合仓库带来的供应链风险。
 如果配置文件里省略 `targets` 字段，脚本也会默认回退到 `.NET_4.7_Any`，避免重新生成当前 runner 无法稳定通过的旧矩阵。
 
 默认已经包含以下目标分支显示名称：
@@ -76,15 +71,14 @@ python scripts/build_dotnet_tools.py --continue-on-error --result-json branch-re
 ## 当前构建状态
 
 - 最后同步时间：`2026-03-14T14:57:16+00:00`
-- 已配置工具数：`2`
+- 已配置源码仓库数：`0`
 - 已配置目标分支数：`1`
 
-### 工具仓库检查
+### 源码仓库检查
 
-| 工具 | 仓库 | 最新提交 | 检测到更新 |
+| 仓库名 | 仓库 | 最新提交 | 检测到更新 |
 | --- | --- | --- | --- |
-| Rubeus | https://github.com/GhostPack/Rubeus.git | `74215f68ea70bd6a66c008da91bf5fe21d20b154` | 否 |
-| RunasCs | https://github.com/antonioCoco/RunasCs.git | `a1e47b55952fadd46bf097be74a6efbcbe846c2b` | 否 |
+| - | - | - | - |
 
 ### 目标分支构建结果
 
