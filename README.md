@@ -70,21 +70,21 @@ python scripts/build_dotnet_tools.py --continue-on-error --result-json branch-re
 <!-- build-status:start -->
 ## 当前构建状态
 
-- 最后同步时间：`2026-03-14T17:23:10+00:00`
-- 已配置源码仓库数：`0`
+- 最后同步时间：`2026-03-15T03:41:24+00:00`
+- 已配置源码仓库数：`1`
 - 已配置目标分支数：`1`
 
 ### 源码仓库检查
 
 | 仓库名 | 仓库 | 最新提交 | 检测到更新 |
 | --- | --- | --- | --- |
-| - | - | - | - |
+| Rubeus | https://github.com/GhostPack/Rubeus.git | `74215f68ea70bd6a66c008da91bf5fe21d20b154` | 是 |
 
 ### 目标分支构建结果
 
 | 显示名称 | Git 分支 | 状态 | 成功/失败 | 最后构建时间 |
 | --- | --- | --- | --- | --- |
-| .NET_4.7_Any | `NET_4.7_Any` | success | 0/0 | `2026-03-14T17:22:55+00:00` |
+| .NET_4.7_Any | `NET_4.7_Any` | success | 1/0 | `2026-03-15T03:41:08+00:00` |
 
 > 说明：Git 分支名不能以 `.` 开头，因此像 `.NET_4.0_Any` 这样的显示名称会自动映射为 `NET_4.0_Any` 分支。
 <!-- build-status:end -->
