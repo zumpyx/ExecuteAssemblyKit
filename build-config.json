@@ -1,5 +1,11 @@
 {
-  "tools": [],
+  "tools": [
+    {
+      "name": "Rubeus",
+      "repository": "https://github.com/GhostPack/Rubeus.git",
+      "enabled": true
+    }
+  ],
   "targets": [
     {
       "framework_version": "4.7",
