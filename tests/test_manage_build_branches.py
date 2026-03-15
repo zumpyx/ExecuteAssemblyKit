@@ -22,9 +22,13 @@ BUILD_SPEC.loader.exec_module(BUILD_DOTNET_TOOLS)
 
 
 class ManageBuildBranchesTests(unittest.TestCase):
-    def test_root_build_config_has_no_seed_tool_repositories(self) -> None:
+    def test_root_build_config_contains_rubeus(self) -> None:
         config = json.loads((REPO_ROOT / "build-config.json").read_text(encoding="utf-8"))
-        self.assertEqual(config["tools"], [])
+        names = [tool["name"] for tool in config["tools"]]
+        self.assertIn("Rubeus", names)
+        rubeus = next(t for t in config["tools"] if t["name"] == "Rubeus")
+        self.assertEqual(rubeus["repository"], "https://github.com/GhostPack/Rubeus.git")
+        self.assertTrue(rubeus.get("enabled", True))
 
     def test_build_config_contains_only_supported_targets(self) -> None:
         config = json.loads((REPO_ROOT / "build-config.json").read_text(encoding="utf-8"))
