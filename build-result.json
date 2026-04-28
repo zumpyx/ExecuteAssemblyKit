@@ -1,0 +1,39 @@
+{
+  "generated_at": "2026-04-28T04:17:46+00:00",
+  "repository_root": "D:\\a\\ExecuteAssemblyKit\\ExecuteAssemblyKit",
+  "output_dir": "D:\\a\\ExecuteAssemblyKit\\ExecuteAssemblyKit\\artifacts",
+  "configuration": "Release",
+  "branch_name": "NET_4.7_Any",
+  "branch_display_name": ".NET_4.7_Any",
+  "framework_version": "4.7",
+  "framework_moniker": "net47",
+  "platform": "Any",
+  "platform_target": "AnyCPU",
+  "msbuild_platform": "Any CPU",
+  "summary": {
+    "status": "success",
+    "total_targets": 1,
+    "successful_targets": 1,
+    "failed_targets": 0,
+    "copied_files": 2
+  },
+  "tools": [
+    {
+      "name": "Rubeus",
+      "repository": "https://github.com/GhostPack/Rubeus.git",
+      "ref": "HEAD",
+      "source_path": "D:\\a\\ExecuteAssemblyKit\\ExecuteAssemblyKit\\tools\\Rubeus",
+      "latest_revision": "74215f68ea70bd6a66c008da91bf5fe21d20b154",
+      "previous_revision": "74215f68ea70bd6a66c008da91bf5fe21d20b154",
+      "updated": false
+    }
+  ],
+  "results": [
+    {
+      "target": "tools\\Rubeus\\Rubeus.sln",
+      "project": "Rubeus",
+      "status": "success",
+      "copied_files": 2
+    }
+  ]
+}
